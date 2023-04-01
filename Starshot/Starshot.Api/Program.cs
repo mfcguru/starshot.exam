@@ -2,8 +2,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Starshot.Api;
-using Starshot.Api.Source;
 using Starshot.Api.Source.Domain.Entities;
+using Starshot.Api.Source.Infrastructure.ErrorHandling;
+using Starshot.Api.Source.Infrastructure.Jwt;
 using System.Reflection;
 
 // Add services to the container.

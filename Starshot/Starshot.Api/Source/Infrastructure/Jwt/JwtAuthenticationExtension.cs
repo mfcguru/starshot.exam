@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Starshot.Api.Source
+namespace Starshot.Api.Source.Infrastructure.Jwt
 {
     public static class JwtAuthenticationExtension
     {

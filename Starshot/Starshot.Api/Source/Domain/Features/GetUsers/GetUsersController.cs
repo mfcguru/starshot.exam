@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Starshot.Api.Source.Domain.Enums;
 
 namespace Starshot.Api.Source.Domain.Features.GetUsers
 {
@@ -13,9 +14,9 @@ namespace Starshot.Api.Source.Domain.Features.GetUsers
         public GetUsersController(IMediator mediator) => this.mediator = mediator;
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery]string? filterName = "", [FromQuery]FilterActive filterActive = FilterActive.None)
         {
-            var result = await mediator.Send(new GetUsersCommand());
+            var result = await mediator.Send(new GetUsersCommand(filterName, filterActive));
 
             return Ok(result);
         }

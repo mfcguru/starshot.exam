@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Starshot.Api.Source.Domain.BusinessRules;
 using System.Net;
 
-namespace Starshot.Api
+namespace Starshot.Api.Source.Infrastructure.ErrorHandling
 {
     public class ErrorDetails
     {
@@ -24,14 +24,12 @@ namespace Starshot.Api
             {
                 appError.Run(async context =>
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
 
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
                         string errorJson;
-                        var message = "Internal server error";
                         if (contextFeature.Error is BusinessRuleException)
                         {
                             var error = (BusinessRuleException)contextFeature.Error;
@@ -45,11 +43,15 @@ namespace Starshot.Api
                         }
                         else
                         {
+                            var message = "Internal server error";
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
                             errorJson = JsonConvert.SerializeObject(new ErrorDetails()
                             {
                                 statusCode = 500,
                                 message = message
                             });
+
                             await context.Response.WriteAsync(errorJson);
 
                             logger.LogError(message, contextFeature.Error);
