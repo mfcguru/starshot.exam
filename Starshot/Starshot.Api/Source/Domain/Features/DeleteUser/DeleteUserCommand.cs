@@ -2,7 +2,7 @@
 using Starshot.Api.Source.Domain.BusinessRules;
 using Starshot.Api.Source.Domain.Entities;
 
-namespace Starshot.Api.Source.Domain.Features.EditUser
+namespace Starshot.Api.Source.Domain.Features.DeleteUser
 {
     public class DeleteUserCommand : IRequest
     {

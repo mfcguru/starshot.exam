@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Starshot.Api.Source.Domain.Features.EditUser
+namespace Starshot.Api.Source.Domain.Features.DeleteUser
 {
     [Authorize]
     [Route("api/[controller]")]

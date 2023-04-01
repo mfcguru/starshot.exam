@@ -5,3 +5,6 @@ dotnet_diagnostic.CS8618.severity = none
 
 # S3247: Duplicate casts should not be made
 dotnet_diagnostic.S3247.severity = none
+
+# CS8602: Dereference of a possibly null reference.
+dotnet_diagnostic.CS8602.severity = none
