@@ -14,6 +14,7 @@
                 <td>TimeIn</td>
                 <td>TimeOut</td>
                 <td>Active</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,9 @@
                     <td>@user.TimeIn</td>
                     <td>@user.TimeOut</td>
                     <td>@user.Active</td>
+                    <td>
+                        <a asp-action="EditUser" asp-route-userId="@user.UserId">Edit</a> | <a asp-action="DeleteUser" asp-route-userId="@user.UserId">Delete</a>
+                    </td>
                 </tr>
             }
         }

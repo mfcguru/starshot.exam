@@ -3,6 +3,6 @@
     public class EditUserViewModel : AddUserViewModel
     {
         public int UserId { get; set; }
-        public string Active { get; set; }
+        public bool Active { get; set; }
     }
 }

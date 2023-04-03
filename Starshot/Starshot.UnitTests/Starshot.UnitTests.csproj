@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Frontend\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Starshot.Api\Starshot.Api.csproj" />
     <ProjectReference Include="..\Starshot.Frontend\Starshot.Frontend.csproj" />
   </ItemGroup>

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NuGet.Common;
 using Starshot.Frontend.Filters;
 using Starshot.Frontend.Models;
 using Starshot.Frontend.Services.Api;
@@ -16,10 +14,7 @@ namespace Starshot.Frontend.Controllers
         private readonly ISessionManager sessionManager;
         private readonly IOptions<AppSettings> appSettings;
 
-        public HomeController(
-            IApiService apiService,
-            ISessionManager sessionManager,
-            IOptions<AppSettings> appSettings)
+        public HomeController(IApiService apiService, ISessionManager sessionManager, IOptions<AppSettings> appSettings)
         {
             this.apiService = apiService;
             this.sessionManager = sessionManager;   
@@ -43,42 +38,65 @@ namespace Starshot.Frontend.Controllers
 
         [HttpGet]
         [SessionStateFilter]
-        public IActionResult AddUser(SessionModel session)
+        public IActionResult AddUser()
         {
-            ViewBag.Session = session;
             return View(new AddUserViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser(string session, AddUserViewModel model)
+        [SessionStateFilter]
+        public async Task<IActionResult> AddUser(AddUserViewModel model)
         {
-            var result = await apiService.AddUser(session, model.FirstName, model.LastName, model.TimeIn, model.TimeOut);
+            var result = await apiService.AddUser(sessionManager.GetToken(this), model.FirstName, model.LastName, model.TimeIn, model.TimeOut);
             if (result.Success)
             {
-                return RedirectToAction("Index", new { session });
+                return RedirectToAction("Index");
             }
 
-            ViewBag.Session = session;
             ViewBag.ErrorMessage = result.ErrorMessage;
             return View(new AddUserViewModel());
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> EditUser(string session, int userId)
+        [HttpGet("EditUser/{userId}")]
+        [SessionStateFilter]
+        public async Task<IActionResult> EditUser(int userId)
         {
-            var result = await apiService.GetUser(session, userId);
+            var result = await apiService.GetUser(sessionManager.GetToken(this), userId);
             if (result.Success)
             {
-                var vm = JsonConvert.DeserializeObject<EditUserViewModel>(result.JsonData);
-                ViewBag.Session = session;
-                return View(vm);    
+                var model = JsonConvert.DeserializeObject<EditUserViewModel>(result.JsonData);
+                return View(model);    
             }
 
             ViewBag.Error = result.ErrorMessage;
-            return RedirectToAction("Index", new { session });
+            return RedirectToAction("Index");
         }
 
-        private string SessionToken { get { return (string)TempData["session_token"]; } }
+        [HttpPost("EditUser")]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            var result = await apiService.EditUser(sessionManager.GetToken(this), model.UserId, model.FirstName, model.LastName, model.TimeIn, model.TimeOut, model.Active);
+            if (result.Success)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Error = result.ErrorMessage;
+            return View(model);
+        }
+
+        [HttpGet("DeleteUser/{userId}")]
+        public async Task<IActionResult> DeleteUser(int userId)
+        {
+            var result = await apiService.DeleteUser(sessionManager.GetToken(this), userId);
+            if (result.Success)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Error = result.ErrorMessage;
+            return RedirectToAction("Index");
+        }
 
         [HttpGet]
         public IActionResult Login()

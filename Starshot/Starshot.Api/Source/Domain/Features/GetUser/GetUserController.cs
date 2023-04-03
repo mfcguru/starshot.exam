@@ -12,7 +12,7 @@ namespace Starshot.Api.Source.Domain.Features.GetUser
         private readonly IMediator mediator;
         public GetUserController(IMediator mediator) => this.mediator = mediator;
 
-        [HttpGet]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetUser(int userId)
         {
             var result = await mediator.Send(new GetUserCommand(userId));
