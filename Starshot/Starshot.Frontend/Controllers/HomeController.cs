@@ -22,7 +22,7 @@ namespace Starshot.Frontend.Controllers
         }
 
         [HttpGet]
-        [SessionStateFilter]
+        [SessionFilter]
         public async Task<IActionResult> Index()
         {
             var result = await apiService.GetUsers(sessionManager.GetToken(this));
@@ -37,28 +37,32 @@ namespace Starshot.Frontend.Controllers
         }
 
         [HttpGet]
-        [SessionStateFilter]
+        [SessionFilter]
         public IActionResult AddUser()
         {
             return View(new AddUserViewModel());
         }
 
         [HttpPost]
-        [SessionStateFilter]
+        [SessionFilter]
         public async Task<IActionResult> AddUser(AddUserViewModel model)
         {
-            var result = await apiService.AddUser(sessionManager.GetToken(this), model.FirstName, model.LastName, model.TimeIn, model.TimeOut);
-            if (result.Success)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                var result = await apiService.AddUser(sessionManager.GetToken(this), model.FirstName, model.LastName, model.TimeIn, model.TimeOut);
+                if (result.Success)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                ViewBag.ErrorMessage = result.ErrorMessage;
             }
 
-            ViewBag.ErrorMessage = result.ErrorMessage;
-            return View(new AddUserViewModel());
+            return View(model);
         }
 
         [HttpGet("EditUser/{userId}")]
-        [SessionStateFilter]
+        [SessionFilter]
         public async Task<IActionResult> EditUser(int userId)
         {
             var result = await apiService.GetUser(sessionManager.GetToken(this), userId);
@@ -73,19 +77,25 @@ namespace Starshot.Frontend.Controllers
         }
 
         [HttpPost("EditUser")]
+        [SessionFilter]
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
-            var result = await apiService.EditUser(sessionManager.GetToken(this), model.UserId, model.FirstName, model.LastName, model.TimeIn, model.TimeOut, model.Active);
-            if (result.Success)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index");
-            }
+                var result = await apiService.EditUser(sessionManager.GetToken(this), model.UserId, model.FirstName, model.LastName, model.TimeIn, model.TimeOut, model.Active);
+                if (result.Success)
+                {
+                    return RedirectToAction("Index");
+                }
 
-            ViewBag.Error = result.ErrorMessage;
+                ViewBag.Error = result.ErrorMessage;
+            }
+            
             return View(model);
         }
 
         [HttpGet("DeleteUser/{userId}")]
+        [SessionFilter]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             var result = await apiService.DeleteUser(sessionManager.GetToken(this), userId);
@@ -114,17 +124,21 @@ namespace Starshot.Frontend.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var result = await apiService.Login(model.Username, model.Password);
-            if (result.Success)
+            if (ModelState.IsValid)
             {
-                var session = JsonConvert.DeserializeObject<SessionModel>(result.JsonData);
+                var result = await apiService.Login(model.Username, model.Password);
+                if (result.Success)
+                {
+                    var session = JsonConvert.DeserializeObject<SessionModel>(result.JsonData);
 
-                sessionManager.SetToken(this, session.Token); 
+                    sessionManager.SetToken(this, session.Token);
 
-                return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ViewBag.ErrorMessage = result.ErrorMessage;
             }
-
-            ViewBag.ErrorMessage = result.ErrorMessage;
+            
             return View(model);
         }
 

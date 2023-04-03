@@ -4,7 +4,7 @@ using Starshot.Frontend.Services.Session;
 
 namespace Starshot.Frontend.Filters
 {
-    public class SessionStateFilterAttribute : Attribute, IActionFilter
+    public class SessionFilterAttribute : Attribute, IActionFilter
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
