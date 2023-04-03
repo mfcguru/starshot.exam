@@ -15,9 +15,9 @@ namespace Starshot.Api.Source.Domain.Features.Login
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginParameters parameters)
         {
-            string token = await mediator.Send(new LoginCommand(parameters));
+            var result = await mediator.Send(new LoginCommand(parameters));
 
-            return Ok(token);
+            return Ok(result);
         }
     }
 }

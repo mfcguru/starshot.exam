@@ -1,7 +1,18 @@
+using Starshot.Frontend;
+using Starshot.Frontend.Services.Api;
+using Starshot.Frontend.Services.Session;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.Configure<AppSettings>(options => builder.Configuration
+        .GetSection("AppSettings")
+        .Bind(options));
+builder.Services.AddTransient<IApiService, ApiService>();
+builder.Services.AddTransient<ISessionManager, SessionManager>();
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
@@ -22,6 +33,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller}/{action}/{id?}",
+    defaults: new { controller = "Home", action = "Index" });
 
 app.Run();

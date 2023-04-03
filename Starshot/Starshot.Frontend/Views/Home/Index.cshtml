@@ -2,7 +2,35 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model IEnumerable<Starshot.Frontend.Models.UserListViewModel>
+
+<div class="container">
+    @Html.ActionLink("Add User", "AddUser", "Home", new { ViewBag.Session })
+    <table class="table">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>FullName</td>
+                <td>TimeIn</td>
+                <td>TimeOut</td>
+                <td>Active</td>
+            </tr>
+        </thead>
+        <tbody>
+        @if (Model != null)
+        {
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.FullName</td>
+                    <td>@user.TimeIn</td>
+                    <td>@user.TimeOut</td>
+                    <td>@user.Active</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+
 </div>

@@ -1,0 +1,66 @@
+﻿@model Starshot.Frontend.Models.AddUserViewModel
+
+@{
+    ViewData["Title"] = "Add User";
+}
+
+<div class="pt-5">
+    <div class="container">
+        <h2 class="text-center">Add User</h2>
+        <div class="row">            
+            <div class="col col-4"></div>
+            <div class="col col-4 pt-3">
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div class="alert alert-danger text-center">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+                <form method="post" asp-controller="Home" asp-action="AddUser">
+                    <div class="row pt-2">
+                        <div class="col">
+                            <label asp-for="FirstName"></label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="FirstName" />
+                            <span asp-validation-for="FirstName"></span>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col">
+                            <label asp-for="LastName"></label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="LastName" />
+                            <span asp-validation-for="FirstName"></span>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col">
+                            <label asp-for="TimeIn"></label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="TimeIn" />
+                            <span asp-validation-for="TimeIn"></span>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col">
+                            <label asp-for="TimeOut"></label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="TimeOut" />
+                            <span asp-validation-for="TimeOut"></span>
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="text-center pt-2">
+                        <button class="btn btn-primary" type="submit" value="AddUser">Add User</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col col-4"></div>
+        </div>
+    </div>
+</div>

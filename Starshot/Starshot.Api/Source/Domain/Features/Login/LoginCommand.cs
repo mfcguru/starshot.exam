@@ -8,17 +8,17 @@ using System.Text;
 
 namespace Starshot.Api.Source.Domain.Features.Login
 {
-    public class LoginCommand : IRequest<string>
+    public class LoginCommand : IRequest<LoginResult>
     {
         private readonly LoginParameters parameters;
         public LoginCommand(LoginParameters parameters) => this.parameters = parameters;
 
-        public class Handler : IRequestHandler<LoginCommand, string>
+        public class Handler : IRequestHandler<LoginCommand, LoginResult>
         {
             private readonly IOptions<AppSettings> appSettings;
             public Handler(IOptions<AppSettings> appSettings) => this.appSettings = appSettings;
 
-            public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
+            public async Task<LoginResult> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
                 return await Task.Run(() =>
                 {
@@ -32,11 +32,15 @@ namespace Starshot.Api.Source.Domain.Features.Login
                         throw new UsernamePasswordIncorrectException();
                     }
 
-                    return GenerateJwtToken();
+                    return new LoginResult
+                    {
+                        Token = GenerateToken(),
+                        Expires = DateTime.Now.AddMinutes(appSettings.Value.TokenExpiration)
+                    };
                 });
             }
 
-            private string GenerateJwtToken()
+            private string GenerateToken()
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(appSettings.Value.Secret);
@@ -46,7 +50,6 @@ namespace Starshot.Api.Source.Domain.Features.Login
                     {
                         new Claim(ClaimTypes.Name, "Default Admin")
                     }),
-                    Expires = DateTime.UtcNow.AddDays(7),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
 

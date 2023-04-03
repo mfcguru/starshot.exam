@@ -57,10 +57,13 @@ namespace Starshot.UnitTests.Api
         }
 
         [TestMethod]
-        public async Task Sucess()
+        public async Task NoFilters()
         {
+            // arrange
+            var searchKey = string.Empty;
+
             // act
-            var command = new GetUsersCommand("", FilterActive.None);
+            var command = new GetUsersCommand(searchKey, FilterActive.None);
             var handler = new GetUsersCommand.Handler(context);
             var actual = await handler.Handle(command, CancellationToken.None);
 
@@ -73,18 +76,16 @@ namespace Starshot.UnitTests.Api
         public async Task FilterByName()
         {
             // arrange
-            var filterKey = "Third";
+            var searchKey = "Third";
 
             // act
-            var command = new GetUsersCommand(filterKey, FilterActive.None);
+            var command = new GetUsersCommand(filterName: searchKey, FilterActive.None);
             var handler = new GetUsersCommand.Handler(context);
             var actual = await handler.Handle(command, CancellationToken.None);
 
             // assert
             var expected = await context.Users
-                .Where(o => 
-                    o.FirstName.ToLower().Contains(filterKey.ToLower()) || 
-                    o.LastName.ToLower().Contains(filterKey.ToLower()))
+                .Where(o => o.FirstName.Contains(searchKey) || o.LastName.Contains(searchKey))
                 .ToListAsync();
 
             Assert.AreEqual(actual.Count, expected.Count);
@@ -93,8 +94,11 @@ namespace Starshot.UnitTests.Api
         [TestMethod]
         public async Task FilterByActiveIsTrue()
         {
+            // arrange
+            var searchKey = string.Empty;
+
             // act
-            var command = new GetUsersCommand("", FilterActive.True);
+            var command = new GetUsersCommand(filterName: searchKey, filterActive: FilterActive.True);
             var handler = new GetUsersCommand.Handler(context);
             var actual = await handler.Handle(command, CancellationToken.None);
 
@@ -109,8 +113,11 @@ namespace Starshot.UnitTests.Api
         [TestMethod]
         public async Task FilterByActiveIsFalse()
         {
+            // arrange
+            var searchKey = string.Empty;
+
             // act
-            var command = new GetUsersCommand("", FilterActive.False);
+            var command = new GetUsersCommand(filterName: searchKey, filterActive: FilterActive.False);
             var handler = new GetUsersCommand.Handler(context);
             var actual = await handler.Handle(command, CancellationToken.None);
 

@@ -7,5 +7,6 @@ namespace Starshot.Api
         public string HardcodedUsername { get; set; }
         public string HardcodedPasswword { get; set; }
         public string Secret { get; set; }
+        public int TokenExpiration { get; set; }
     }
 }

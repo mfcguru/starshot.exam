@@ -37,7 +37,7 @@ namespace Starshot.UnitTests.Api
         public async Task Sucess()
         {
             // arrange
-            var userCount = await context.Users.CountAsync();
+            var expected = (await context.Users.Where(o => o.Active).CountAsync()) - 1;
 
             // act
             var command = new DeleteUserCommand(userId);
@@ -45,9 +45,11 @@ namespace Starshot.UnitTests.Api
             await handler.Handle(command, CancellationToken.None);
 
             // assert
-            var expected = userCount + 1;
-            var actual = await context.Users.CountAsync();
+            var actual = await context.Users.Where(o => o.Active).CountAsync();
             Assert.AreEqual(expected, actual);
+
+            var user = await context.Users.FindAsync(userId);
+            Assert.IsFalse(user.Active);
         }
 
         [TestMethod]
