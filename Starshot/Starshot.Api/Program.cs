@@ -1,3 +1,4 @@
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -9,7 +10,7 @@ using System.Reflection;
 
 // Add services to the container.
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddDbContext<DataContext>(options => options
         .UseSqlServer(builder.Configuration.GetSection("AppSettings").Get<AppSettings>().ConnectionString));
 builder.Services.Configure<AppSettings>(options => builder.Configuration
@@ -18,17 +19,17 @@ builder.Services.Configure<AppSettings>(options => builder.Configuration
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddJwtAuthentication(builder.Configuration.GetSection("AppSettings").Get<AppSettings>().Secret);
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(o =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Starshot V1", Version = "v1" });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    o.SwaggerDoc("v1", new OpenApiInfo { Title = "Starshot V1", Version = "v1" });
+    o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Description = "Please enter into field the word 'Bearer' following by space and JWT",
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {{
+    o.AddSecurityRequirement(new OpenApiSecurityRequirement {{
         new OpenApiSecurityScheme
         {
             Reference = new OpenApiReference
@@ -39,7 +40,19 @@ builder.Services.AddSwaggerGen(c =>
         },
         new string[] { }
     }});
-    c.CustomSchemaIds(x => x.FullName);
+    o.CustomSchemaIds(x => x.FullName);
+});
+builder.Services.AddMassTransit(configuration =>
+{
+    configuration.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(context);
+    });
 });
 
 // configure pipeline

@@ -14,7 +14,7 @@ namespace Starshot.Api.Source.Domain.Features.DeleteUser
             private readonly DataContext context;
             public Handler(DataContext context) => this.context = context;
 
-            public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+            public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
             {
                 var user = await context.Users.FindAsync(request.userId);
                 if (user == null)
@@ -25,8 +25,6 @@ namespace Starshot.Api.Source.Domain.Features.DeleteUser
                 user.Active = false;
 
                 await context.SaveChangesAsync(cancellationToken);
-
-                return Unit.Value;
             }
         }
     }

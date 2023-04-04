@@ -13,7 +13,7 @@ namespace Starshot.Api.Source.Domain.Features.AddUser
             private readonly DataContext context;
             public Handler(DataContext context) => this.context = context;
 
-            public async Task<Unit> Handle(AddUserCommand request, CancellationToken cancellationToken)
+            public async Task Handle(AddUserCommand request, CancellationToken cancellationToken)
             {
                 context.Users.Add(new User
                 {
@@ -24,8 +24,6 @@ namespace Starshot.Api.Source.Domain.Features.AddUser
                 });
 
                 await context.SaveChangesAsync(cancellationToken);
-
-                return Unit.Value;
             }
         }
     }

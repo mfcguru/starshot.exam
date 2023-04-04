@@ -19,7 +19,7 @@ namespace Starshot.Api.Source.Domain.Features.EditUser
             private readonly DataContext context;
             public Handler(DataContext context) => this.context = context;
 
-            public async Task<Unit> Handle(EditUserCommand request, CancellationToken cancellationToken)
+            public async Task Handle(EditUserCommand request, CancellationToken cancellationToken)
             {
                 var user = await context.Users.FindAsync(request.userId, cancellationToken);
                 if (user == null)
@@ -34,8 +34,6 @@ namespace Starshot.Api.Source.Domain.Features.EditUser
                 user.Active = request.parameters.Active;
 
                 await context.SaveChangesAsync(cancellationToken);
-
-                return Unit.Value;
             }
         }
     }

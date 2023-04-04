@@ -1,5 +1,6 @@
 using Starshot.Frontend;
 using Starshot.Frontend.Services.Api;
+using Starshot.Frontend.Services.Command;
 using Starshot.Frontend.Services.Session;
 
 // add services to the container
@@ -8,7 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.Configure<AppSettings>(options => builder.Configuration
         .GetSection("AppSettings")
         .Bind(options));
-builder.Services.AddTransient<IApiService, ApiService>();
+builder.Services.AddTransient<IDispatchService, ApiService>();
 builder.Services.AddTransient<ISessionManager, SessionManager>();
 
 // configure pipeline

@@ -11,4 +11,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Authentication\" />
+    <Folder Include="Services\Command\MassTransit\" />
+  </ItemGroup>
+
 </Project>

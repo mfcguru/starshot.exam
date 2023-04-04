@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
+using Starshot.Frontend.Services.Command;
 using System.Net.Http.Headers;
 
 namespace Starshot.Frontend.Services.Api
 {
-    public class ApiService : IApiService
+    public class ApiService : IDispatchService
     {
         private readonly string apiBaseUri;
         

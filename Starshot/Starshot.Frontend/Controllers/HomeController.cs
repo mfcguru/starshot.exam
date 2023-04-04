@@ -4,17 +4,18 @@ using Newtonsoft.Json;
 using Starshot.Frontend.Filters;
 using Starshot.Frontend.Models;
 using Starshot.Frontend.Services.Api;
+using Starshot.Frontend.Services.Command;
 using Starshot.Frontend.Services.Session;
 
 namespace Starshot.Frontend.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IApiService apiService;
+        private readonly IDispatchService apiService;
         private readonly ISessionManager sessionManager;
         private readonly IOptions<AppSettings> appSettings;
 
-        public HomeController(IApiService apiService, ISessionManager sessionManager, IOptions<AppSettings> appSettings)
+        public HomeController(IDispatchService apiService, ISessionManager sessionManager, IOptions<AppSettings> appSettings)
         {
             this.apiService = apiService;
             this.sessionManager = sessionManager;   
