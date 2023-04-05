@@ -11,14 +11,16 @@ namespace Starshot.Frontend.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IDispatchService apiService;
+        private readonly IApiService apiService;
         private readonly ISessionManager sessionManager;
-        private readonly IOptions<AppSettings> appSettings;
+        private readonly CommandServiceFactory commandServiceFactory;
+        private readonly IOptions<AppSettings> appSettings;        
 
-        public HomeController(IDispatchService apiService, ISessionManager sessionManager, IOptions<AppSettings> appSettings)
+        public HomeController(IApiService apiService, ISessionManager sessionManager, CommandServiceFactory factory, IOptions<AppSettings> appSettings)
         {
             this.apiService = apiService;
-            this.sessionManager = sessionManager;   
+            this.sessionManager = sessionManager;
+            this.commandServiceFactory = factory;
             this.appSettings = appSettings; 
         }
 
@@ -50,7 +52,8 @@ namespace Starshot.Frontend.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await apiService.AddUser(sessionManager.GetToken(this), model.FirstName, model.LastName, model.TimeIn, model.TimeOut);
+                var service = commandServiceFactory.CreateInstance(appSettings.Value.CommandServiceType, sessionManager.GetToken(this));
+                var result = await service.AddUser(model.FirstName, model.LastName, model.TimeIn, model.TimeOut);
                 if (result.Success)
                 {
                     return RedirectToAction("Index");
@@ -83,7 +86,8 @@ namespace Starshot.Frontend.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await apiService.EditUser(sessionManager.GetToken(this), model.UserId, model.FirstName, model.LastName, model.TimeIn, model.TimeOut, model.Active);
+                var service = commandServiceFactory.CreateInstance(appSettings.Value.CommandServiceType, sessionManager.GetToken(this));
+                var result = await service.EditUser(model.UserId, model.FirstName, model.LastName, model.TimeIn, model.TimeOut, model.Active);
                 if (result.Success)
                 {
                     return RedirectToAction("Index");
@@ -99,7 +103,8 @@ namespace Starshot.Frontend.Controllers
         [SessionFilter]
         public async Task<IActionResult> DeleteUser(int userId)
         {
-            var result = await apiService.DeleteUser(sessionManager.GetToken(this), userId);
+            var service = commandServiceFactory.CreateInstance(appSettings.Value.CommandServiceType, sessionManager.GetToken(this));
+            var result = await service.DeleteUser(userId);
             if (result.Success)
             {
                 return RedirectToAction("Index");

@@ -1,8 +1,6 @@
-﻿using Starshot.Frontend.Services.Api;
-
-namespace Starshot.Frontend.Services.Command
+﻿namespace Starshot.Frontend.Services.Api
 {
-    public interface IDispatchService
+    public interface IApiService
     {
         Task<ServiceResult> AddUser(string token, string firstName, string lastName, DateTime timeIn, DateTime timeOut);
         Task<ServiceResult> EditUser(string token, int userId, string firstName, string lastName, DateTime timeIn, DateTime timeOut, bool active);

@@ -8,6 +8,13 @@ namespace Starshot.Api.Source.Domain.Features.EditUser
     {
         private readonly int userId;
         private readonly EditUserParameters parameters;
+
+        public EditUserCommand(EditUserParameters parameters)
+        {
+            this.userId = parameters.UserId;
+            this.parameters = parameters;
+        }
+
         public EditUserCommand(int userId, EditUserParameters parameters)
         {
             this.userId = userId;

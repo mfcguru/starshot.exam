@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Starshot.Frontend.Services.Api
+namespace Starshot.Frontend.Services
 {
     public class ServiceResult
     {

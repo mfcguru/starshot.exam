@@ -18,7 +18,7 @@ namespace Starshot.Api.Source.Domain.Features.DeleteUser
         {
             logger.LogDebug("delete user event was triggered");
 
-            await mediator.Send(new DeleteUserCommand(context.Message.UserId));
+            await mediator.Send(new DeleteUserCommand(context.Message));
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Starshot.Api.Source.Domain.Features.DeleteUser
     {
         private readonly int userId;
         public DeleteUserCommand(int userId) => this.userId = userId;
+        public DeleteUserCommand(DeleteUserParameter parameter) => this.userId = parameter.UserId;
 
         public class Handler : IRequestHandler<DeleteUserCommand>
         {

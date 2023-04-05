@@ -9,11 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\Authentication\" />
-    <Folder Include="Services\Command\MassTransit\" />
+	<PackageReference Include="MassTransit" Version="8.0.14" />
+	<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.14" />
   </ItemGroup>
 
 </Project>

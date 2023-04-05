@@ -44,6 +44,8 @@ builder.Services.AddSwaggerGen(o =>
 });
 builder.Services.AddMassTransit(configuration =>
 {
+    configuration.AddConsumers(Assembly.GetExecutingAssembly());
+
     configuration.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h =>

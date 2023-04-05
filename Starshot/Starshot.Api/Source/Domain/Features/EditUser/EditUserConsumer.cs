@@ -18,7 +18,7 @@ namespace Starshot.Api.Source.Domain.Features.EditUser
         {
             logger.LogDebug("edit user event was triggered");
 
-            await mediator.Send(new EditUserCommand(context.Message.UserId, context.Message));
+            await mediator.Send(new EditUserCommand(context.Message));
         }
     }
 }
