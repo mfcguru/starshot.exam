@@ -25,20 +25,11 @@ namespace Starshot.Frontend.Services.Command
                     timeOut = timeOut
                 });
 
-                return new ServiceResult
-                {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Success = true
-                };
+                return SuccessResult();
             }
             catch(Exception e)
             {
-                return new ServiceResult
-                {
-                    ErrorMessage = e.ToString(),
-                    StatusCode = System.Net.HttpStatusCode.InternalServerError,
-                    Success = false
-                };
+                return ErrorResult(e);
             }
         }
 
@@ -51,20 +42,11 @@ namespace Starshot.Frontend.Services.Command
                     UserId = userId
                 });
 
-                return new ServiceResult
-                {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Success = true
-                };
+                return SuccessResult();
             }
             catch (Exception e)
             {
-                return new ServiceResult
-                {
-                    ErrorMessage = e.ToString(),
-                    StatusCode = System.Net.HttpStatusCode.InternalServerError,
-                    Success = false
-                };
+                return ErrorResult(e);
             }
         }
 
@@ -82,21 +64,31 @@ namespace Starshot.Frontend.Services.Command
                     Active = active
                 });
 
-                return new ServiceResult
-                {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Success = true
-                };
+                return SuccessResult();
             }
             catch (Exception e)
             {
-                return new ServiceResult
-                {
-                    ErrorMessage = e.ToString(),
-                    StatusCode = System.Net.HttpStatusCode.InternalServerError,
-                    Success = false
-                };
+                return ErrorResult(e);
             }
+        }
+
+        private ServiceResult SuccessResult()
+        {
+            return new ServiceResult
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Success = true
+            };
+        }
+
+        private ServiceResult ErrorResult(Exception e)
+        {
+            return new ServiceResult
+            {
+                ErrorMessage = e.ToString(),
+                StatusCode = System.Net.HttpStatusCode.InternalServerError,
+                Success = false
+            };
         }
     }
 }

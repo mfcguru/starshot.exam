@@ -13,7 +13,7 @@ namespace Starshot.Api.Source.Domain.Features.DeleteUser
         public DeleteUserController(IMediator mediator) => this.mediator = mediator;
 
         [HttpDelete("{userId}")]
-        public async Task<IActionResult> EditUser(int userId)
+        public async Task<IActionResult> DeleteUser(int userId)
         {
             await mediator.Send(new DeleteUserCommand(userId));
 
