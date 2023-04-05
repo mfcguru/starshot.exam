@@ -19,9 +19,7 @@ This is the frontend impelementation and can only use either Web API or MassTran
 
 ```
 "AppSettings": {
-    "ApiBaseUri": "https://localhost:44319/api",
-    "HardcodedUsername": "admin",
-    "HardcodedPasswword": "g#wK5;jN]F&x+e>",
+    ...
     "CommandServiceType": 1
   }
 ```
