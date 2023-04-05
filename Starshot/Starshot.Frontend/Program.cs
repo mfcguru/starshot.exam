@@ -13,7 +13,7 @@ builder.Services.Configure<AppSettings>(options => builder.Configuration
         .Bind(options));
 builder.Services.AddTransient<IApiService, ApiService>();
 builder.Services.AddTransient<ISessionManager, SessionManager>();
-builder.Services.AddSingleton<CommandServiceFactory>();
+builder.Services.AddScoped<CommandServiceFactory>();
 builder.Services.AddMassTransit(configuration =>
 {
     configuration.UsingRabbitMq((context, cfg) =>
