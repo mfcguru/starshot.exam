@@ -17,7 +17,7 @@ namespace Starshot.Frontend.Services.Command
         {
             try
             {
-                await publishEndpoint.Publish<AddUserModel>(new AddUserModel
+                await publishEndpoint.Publish<AddUserParameters>(new AddUserParameters
                 {
                     FirstName = firstName,
                     LastName = lastName,
@@ -46,7 +46,7 @@ namespace Starshot.Frontend.Services.Command
         {
             try
             {
-                await publishEndpoint.Publish<DeleteUserModel>(new DeleteUserModel
+                await publishEndpoint.Publish<DeleteUserParameters>(new DeleteUserParameters
                 {
                     UserId = userId
                 });
@@ -72,7 +72,7 @@ namespace Starshot.Frontend.Services.Command
         {
             try
             {
-                await publishEndpoint.Publish<EditUserModel>(new EditUserModel
+                await publishEndpoint.Publish<EditUserParameters>(new EditUserParameters
                 {
                     UserId = userId,
                     FirstName = firstName,

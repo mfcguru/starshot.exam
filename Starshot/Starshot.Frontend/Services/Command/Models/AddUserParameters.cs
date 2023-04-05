@@ -1,7 +1,7 @@
 ﻿
 namespace Starshot.Frontend.Services.Command.Models
 {
-    public record AddUserModel
+    public record AddUserParameters
     {
         public string FirstName { get; init; }
         public string LastName { get; init; }
